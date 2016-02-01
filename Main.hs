@@ -13,10 +13,5 @@ process line = do
     Right ex -> mapM_ print ex
 
 main :: IO ()
-main = runInputT defaultSettings loop
-  where
-  loop = do
-    minput <- getInputLine "ready> "
-    case minput of
-      Nothing -> outputStrLn "Goodbye."
-      Just input -> (liftIO $ process input) >> loop
+main = do
+    getContents >>= process

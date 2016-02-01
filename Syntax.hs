@@ -9,6 +9,8 @@ data Expr
   | Call Name [Expr]
   | Function Name [Expr] Expr
   | Extern Name [Expr]
+  | Block [Expr]
+  | If Expr Expr Expr
   deriving (Eq, Ord, Show)
 
 data Op

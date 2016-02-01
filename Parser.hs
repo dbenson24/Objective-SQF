@@ -55,13 +55,23 @@ call = do
   args <- parens $ commaSep expr
   return $ Call name args
 
+block :: Parser Expr
+block = do
+    expressions <- braces $ many $ do
+       e <- expr
+       reserved ";"
+       return e
+    return $ Block expressions 
+
 factor :: Parser Expr
 factor = try floating
       <|> try int
       <|> try extern
       <|> try function
       <|> try call
-      <|> variable
+      <|> try variable
+      <|> try ifthen
+      <|> try block
       <|> parens expr
 
 defn :: Parser Expr
@@ -69,13 +79,23 @@ defn = try extern
     <|> try function
     <|> expr
 
+ifthen :: Parser Expr
+ifthen = do
+    reserved "if"
+    cond <- expr
+    reserved "then"
+    tr <- expr
+    reserved "else"
+    fl <- expr
+    return $ If cond tr fl
+
 contents :: Parser a -> Parser a
 contents p = do
   Tok.whiteSpace lexer
   r <- p
   eof
   return r
-
+ 
 toplevel :: Parser [Expr]
 toplevel = many $ do
     def <- defn
