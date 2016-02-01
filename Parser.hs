@@ -82,8 +82,7 @@ defn = try extern
 ifthen :: Parser Expr
 ifthen = do
     reserved "if"
-    cond <- expr
-    reserved "then"
+    cond <- parens expr
     tr <- expr
     reserved "else"
     fl <- expr

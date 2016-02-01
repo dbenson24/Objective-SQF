@@ -1,5 +1,5 @@
 def touch(x) {
-    if touch(1.0) then {
+    if (touch(1.0)) {
         x + 1.0;
         5;
     } else {
